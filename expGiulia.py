@@ -25,18 +25,27 @@ from numpy import (sin, cos, tan, log, log10, pi, average,
 from numpy.random import random, randint, normal, shuffle
 import os  # handy system and path functions
 import sys  # to get file system encoding
-
 from psychopy.hardware import keyboard
 import threading
-
-
+from screeninfo import get_monitors
 def runExp(participantId):
+    """
+    for m in get_monitors():
+            print("width :"+str(m.width))
+            print("height :" + str(m.height))
+    """
+    tmp = get_monitors()
+    new_width = tmp[1].width
+    new_height = tmp[1].height
+    print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
+
     # Ensure that relative paths start from the same directory as this scripta
     _thisDir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(_thisDir)
 
     # Store info about the experiment session
     psychopyVersion = '2020.2.4'
+    #psychopyVersion = '2021.1.3'
     expName = 'ExpGiulia'  # from the Builder filename that created this script
     expInfo = {'participant': participantId, 'session': '001'}
 
@@ -67,7 +76,7 @@ def runExp(participantId):
 
     # Setup the Window
     win = visual.Window(
-        size=(1024, 768), fullscr=True, screen=0,
+        size=(new_width, new_height), fullscr=False, screen=0,
         winType='pyglet', allowGUI=False, allowStencil=False,
         monitor='testMonitor', color=[0, 0, 0], colorSpace='rgb',
         blendMode='avg', useFBO=True,
@@ -95,11 +104,15 @@ def runExp(participantId):
 
     # Initialize components for Routine "Video"
     VideoClock = core.Clock()
+    if(new_width==1280 and new_height==1024):
+        myfilename = 'videos\\filmato_Giulia_resized.mp4'
+    else:
+        myfilename = 'videos\\filmato_Giulia_original.mp4'
     video = visual.MovieStim3(
-        win=win, name='video',
+        win=win, size=(new_width, new_height), name='video',
         noAudio=False,
         #filename='C:\\Users\\matti\\OneDrive\\Desktop\\Tesi\\VideoEsperimenti\\filmato_Giulia.mp4',
-        filename='videos\\filmato_Giulia.mp4',
+        filename=myfilename,
         ori=0, pos=(0, 0), opacity=1,
         loop=False,
         depth=0.0,
@@ -291,5 +304,3 @@ def runExp(participantId):
                 pass  # wait until it has properly finished polling
 
     sys.exit(1)  # quits the python session entirely
-
-
